@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ *
+ * Default template for add to cart link.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - url: The URL to the add to cart route.
+ * - product_variation: The product variation entity.
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="featured-add-button">
+  <a href="{{ url }}" class="button success" rel="nofollow" data-variation="{{ product_variation.id }}">{{ 'Buy Now'|t }}</a>
+</div>
+

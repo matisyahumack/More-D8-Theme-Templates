@@ -1,0 +1,174 @@
+{#
+/**
+ * @file
+ * Template for the order receipt.
+ *
+ * Available variables:
+ * - order_entity: The order entity.
+ * - billing_information: The billing information.
+ * - shipping_information: The shipping information.
+ * - payment_method: The payment method.
+ * - totals: An array of order totals values with the following keys:
+ *   - subtotal: The order subtotal price.
+ *   - adjustments: An array of adjustment totals:
+ *     - type: The adjustment type.
+ *     - label: The adjustment label.
+ *     - total: The adjustment total price.
+ *     - weight: The adjustment weight, taken from the adjustment type.
+ *   - total: The order total price.
+ *
+ * @ingroup themeable
+ */
+#}
+
+<table style="margin: 15px auto 0 auto; max-width: 768px; font-family: arial,sans-serif; background:#021651; color:#ffffff;">
+  <tbody>
+  <tr>
+    <td>
+      <table style="margin-left: auto; margin-right: auto; max-width: 768px; text-align: center;">
+        <tbody>
+        <tr>
+          <td>
+            <a href="{{ url('<front>') }}" style="color:#ffffff; text-decoration: none; font-weight: bold; margin-top: 15px;">{{ order_entity.getStore.label }}</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <table style=" background:#ffffff; color:#021651; text-align: center; min-width: 450px; margin: 5px auto 0 auto; border: 1px solid #cccccc; border-radius: 5px; padding: 40px 30px 30px 30px;">
+        <tbody>
+        <tr>
+        <td><img src="https://livingtreecommunityfoods.com/sites/default/files/HeaderLogo.jpg" style="max-width:480px;"/></td>
+        </tr>
+        <tr>
+          <td style="color:#021651; font-size: 30px; padding-bottom: 30px">{{ 'Order Confirmation'|t }}</td>
+        </tr>
+        <tr>
+          <td style="color:#021651; ont-weight: bold; padding-top:15px; padding-bottom: 15px; text-align: left; border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc">
+            {{ 'Order #@number details:'|t({'@number': order_entity.getOrderNumber}) }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {% block order_items %}
+            <table style="color:#021651; padding-top: 15px; padding-bottom:15px; width: 100%">
+              <tbody style="text-align: left;">
+              {% for order_item in order_entity.getItems %}
+              <tr>
+                <td>
+                  {{ order_item.getQuantity|number_format }} x
+                </td>
+                <td>
+                  <span>{{ order_item.label }} {{ order_item.getPurchasedEntity|commerce_entity_render('receipt') }}</span>
+                  <span style="color:#021651; float: right;">{{ order_item.getTotalPrice|commerce_price_format }}</span>
+                </td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            {% endblock %}
+          </td>
+          <tr>
+                <td>
+                  <div style="text-align:left;">
+                  {{ drupal_view('free_items', 'attachment_1', order_entity.getOrderNumber) }}
+                  {{ drupal_view('free_items', 'attachment_2', order_entity.getOrderNumber) }}
+                  {{ drupal_view('free_items', 'attachment_3', order_entity.getOrderNumber) }}
+                  {{ drupal_view('free_items', 'attachment_4', order_entity.getOrderNumber) }}
+                  {{ drupal_view('free_items', 'attachment_5', order_entity.getOrderNumber) }}
+                  </div>
+                </td>
+              </tr>
+        </tr>
+        <tr>
+          <td>
+            <p style="color:#021651; margin-bottom: 0;">
+              {{ 'Subtotal: @subtotal'|t({'@subtotal': totals.subtotal|commerce_price_format}) }}
+            </p>
+          </td>
+        </tr>
+        {% for adjustment in totals.adjustments %}
+        <tr>
+          <td>
+            <p style="color:#021651; margin-bottom: 0;">
+              {{ adjustment.label }}: {{ adjustment.total|commerce_price_format }}
+            </p>
+          </td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td>
+            <p style="color:#021651; font-size: 24px; padding-top: 15px; padding-bottom: 5px;">
+              {{ 'Order Total: @total'|t({'@total': order_entity.getTotalPrice|commerce_price_format}) }}
+            </p>
+            <p>
+              {{ content.field_include_gift_receipt }}
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {% if (billing_information or shipping_information) %}
+            <table style="color:#021651; width: 100%; padding-top:15px; padding-bottom: 15px; text-align: left; border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc">
+              <tbody>
+              <tr>
+                {% if shipping_information %}
+                  <td style="color:#021651; padding-top: 5px; font-weight: bold;">{{ 'Shipping Information'|t }}</td>
+                {% endif %}
+                {% if billing_information %}
+                  <td style="color:#021651; padding-top: 5px; font-weight: bold;">{{ 'Billing Information'|t }}</td>
+                {% endif %}
+              </tr>
+              <tr>
+                {% if shipping_information %}
+                  <td>
+                    {% block shipping_information %}
+                      {{ shipping_information }}
+                    {% endblock %}
+                  </td>
+                {% endif %}
+                {% if billing_information %}
+                  <td>
+                    {% block billing_information %}
+                      {{ billing_information }}
+                    {% endblock %}
+                  </td>
+                {% endif %}
+              </tr>
+              {% if payment_method %}
+                <tr>
+                  <td style="color:#021651; font-weight: bold; margin-top: 10px;">{{ 'Payment Method'|t }}</td>
+                </tr>
+                <tr>
+                  <td>
+                    {% block payment_method %}
+                      {{ payment_method }}
+                    {% endblock %}
+                  </td>
+                </tr>
+              {% endif %}
+              </tbody>
+            </table>
+            {% endif %}
+          </td>
+        </tr>
+        
+        <tr>
+          <td>
+            {% block additional_information %}
+              {{ 'Thank you for your order and for supporting family farmers!'|t }}
+            {% endblock %}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p style="color:#021651; font-size: 24px; padding-top: 25px; padding-bottom: 5px;">
+            {{ drupal_view('special_comments', 'default', order_entity.getOrderNumber) }}
+            </p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>

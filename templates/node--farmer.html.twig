@@ -1,0 +1,25 @@
+<article id="node-{{ node.id }}" {{ attributes }}>
+
+  {{ title_prefix }}
+  {% if not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  <div class="large-12 columns">
+    <div class="farmer-image">{{ content.field_farmer_primary_image }}</div>
+    {{ content.body }}
+  </div>
+  {% for item in content.field_farmer_secondary_images|children %}
+    <div class="farmer-add-images">{{ item }}</div>
+  {% endfor %}
+  {%if content.field_youtube_url %}
+  {% for item in content.field_youtube_url|children %}
+  <div class="large-12 columns">
+    <div class="responsive-embed widescreen">  
+      <iframe width="560" height="315" src="{{ item }}" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</article>

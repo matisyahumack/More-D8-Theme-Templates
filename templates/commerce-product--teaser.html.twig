@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ *
+ * Default product template.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - product: The rendered product fields.
+ *   Use 'product' to print them all, or print a subset such as
+ *   'product.title'. Use the following code to exclude the
+ *   printing of a given field:
+ *   @code
+ *   {{ product|without('title') }}
+ *   @endcode
+ * - product_entity: The product entity.
+ * - product_url: The product URL.
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+<div class="grid-container">
+  <div class="grid-x grid-margin-x small-6 large-4 columns">
+    <div class="cell">
+      <div class="card">
+        {{ product.variation_field_product_image}}
+        <ul class="accordion" data-accordion data-allow-all-closed="true">
+          <li class="accordion-item" data-accordion-item>
+            <a href="#" class="accordion-title">Quick buy</a>
+            <div class="accordion-content" data-tab-content>
+              <div class="a2c">{{ product.variations}}</div>
+            </div>
+          </li>
+        </ul>
+        <div class="card-section">
+          <h4 class="teaser-title">{{ product.field_display_name.0 }}</h4>
+        </div>
+      </div>
+    </div>
+  </row>
+</div>
+</article>

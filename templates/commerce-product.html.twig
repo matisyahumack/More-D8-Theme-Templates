@@ -1,0 +1,123 @@
+{#
+/**
+ * @file
+ *
+ * Default product template.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - product: The rendered product fields.
+ *   Use 'product' to print them all, or print a subset such as
+ *   'product.title'. Use the following code to exclude the
+ *   printing of a given field:
+ *   @code
+ *   {{ product|without('title') }}
+ *   @endcode
+ * - product_entity: The product entity.
+ * - product_url: The product URL.
+ *
+ * @ingroup themeable
+ */
+#}
+{% if "On" in product.field_has.0 %}
+<div class="large-12 float-left small-12">
+          {{ product.field_rating.0 }} <div class="italic text-11-count">{{ product.field_review_count.0 }} reviews</div>
+</div>
+{% endif %}
+<article{{ attributes }}>
+  <div class="row product-page">
+    <div class="columns large-3 small-3 large-push-9">
+      {{ product.variation_sku }}
+      {% if product.variation_list_price %}
+      <div class="list-product">{{ product.variation_list_price.0 }}</div>
+      {% endif %}
+      <div class="product-price">{{ product.variation_price }}</div>
+      {% if product.variation_field_applicable_special %}
+        <div class="applicable-special">{{ product.variation_field_applicable_special }}</div>
+      {% endif %}
+      <div class="large-12 float-left">{{ product.variations}}</div>
+      <div class="large-12 float-left">{{ product.variation_add_to_wishlist_link }}</div>
+      <div class="large-12 float-left">
+        <strong>{{ 'Share with friends & family'|t }}</strong><br/>
+        {{ product.addtoany }}
+      </div>
+    </div>
+    <div class="columns large-9 large-pull-3 small-9 ">
+      <div class="large-5 columns float-left">
+        <div class="large-12 columns">
+        {{ product.variation_field_product_image }}
+        </div>
+        <div class="large-12 columns ingredients"><div class="inline-label">
+         <div class="field-label">Ingredients:</div>
+           {{ product.field_ingredients.0 }}
+        </div>
+      </div>
+      <div class="large-12 small-12 columns" style="margin-top:1em;">{{ product.field_certification_icons }}</div>
+      {% if product.field_other_characteristics %}
+      <div class="ot-taxonomy-wrapper">
+          {% for item in product.field_other_characteristics|children %}
+        <div class="ot-taxonomy"> <i class="far fa-check-square"></i>{{ item }} </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+      <div class="large-7 colums float-left">
+      <ul class="tabs" data-tabs id="example-tabs">
+        <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Product info</a></li>
+        {% if product.field_recipes['#items'] is not empty %}
+          <li class="tabs-title"><a data-tabs-target="panel2" href="#panel2">Recipes</a></li>
+        {% endif %}
+        {% if product.field_educational['#items'] is not empty %}
+          <li class="tabs-title"><a data-tabs-target="panel3" href="#panel3">Educational</a></li>
+        {% endif %}
+        {% if product.field_nutritional_information['#items'] is not empty %}
+          <li class="tabs-title"><a data-tabs-target="panel4" href="#panel4">Nutritional info</a></li>
+        {% endif %}
+        {% if "On" in product.field_has.0 %}
+          <li class="tabs-title"><a data-tabs-target="panel5" href="#panel5">Reviews</a></li>
+        {% endif %}
+      </ul>
+      <div class="tabs-content" data-tabs-content="example-tabs">
+        <div class="tabs-panel is-active" id="panel1">
+          <p>{{ product.body}}</p>
+          {% if product.field_video_embed|render is not empty %}
+            <div class="large-12 columns">
+              <div class="responsive-embed widescreen">  
+                <iframe width="560" height="315" title="Editorial video" src="{{ product.field_video_embed.0 }}" frameborder="0" allowfullscreen></iframe>
+              </div>
+            </div>
+          {% endif %}
+          {% if product.field_related_farmer['#items'] is not empty %}
+           <button class="button" data-open="exampleModal1">Meet the farmers</button>
+            <div class="reveal large" id="exampleModal1" data-reveal data-animation-in="scale-in-up" data-animation-out="scale-out-down">
+             {{ product.field_related_farmer }}
+             <button class="close-button" data-close aria-label="Close modal" type="button"><span aria-hidden="true">&times;</span>
+             </button>
+            </div>
+          {% endif %}
+        </div>
+        <div class="tabs-panel" id="panel2">
+          <p>{{ product.field_recipes }} </p>
+        </div>
+        <div class="tabs-panel" id="panel3">
+          <p>{{ product.field_educational }} </p>
+        </div>
+        <div class="tabs-panel" id="panel4">
+          <p>{{ product.field_nutritional_information.0 }}</p>
+        </div>
+        <div class="tabs-panel" id="panel5">
+          <p>{{ drupal_view('product_reviews', 'block_1') }}</p>
+        </div>
+      </div>
+      </div>
+    </div>
+    </div>
+    {% if product.field_related_products|render is not empty %}
+      <div class="large-12 small-12  products-page-related-products float-left">
+        <h6>Related products</h6>
+        {{ product.field_related_products }}
+      </div>
+    {% endif %}
+  </div>
+  
+</article>
